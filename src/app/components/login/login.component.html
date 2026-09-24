@@ -1,0 +1,93 @@
+<form [formGroup]="userForm">
+  <div class="center-box" style="width: 30%">
+    <div style="display: flex; margin-bottom: 25px">
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          margin-right: 25px;
+          padding-top: 2px;
+        "
+      >
+        <label
+          for="user"
+          class="shared-label"
+          [style.margin-bottom]="
+            2 +
+            (user?.touched && user?.errors?.['required'] ? 5 + 17 : 0) +
+            10 +
+            2 +
+            'px'
+          "
+        >
+          <strong>User</strong>
+        </label>
+        <label for="password" class="shared-label">
+          <strong>Password</strong>
+        </label>
+      </div>
+      <div style="display: flex; flex-direction: column; flex-grow: 1">
+        <input
+          id="user"
+          formControlName="user"
+          type="text"
+          class="shared-text"
+          [ngClass]="{ error: user?.touched && user?.errors?.['required'] }"
+          style="margin-bottom: 10px"
+        />
+        @if (user?.touched && user?.errors?.["required"]) {
+          <div class="error" style="margin: -5px 0 10px">
+            * User is required
+          </div>
+        }
+        <input
+          id="password"
+          formControlName="password"
+          class="shared-text"
+          [type]="showPassword ? 'text' : 'password'"
+          [ngClass]="{
+            error: password?.touched && password?.errors?.['required'],
+          }"
+          style="margin-bottom: 10px"
+          (keyup.enter)="logIn()"
+        />
+        @if (password?.touched && password?.errors?.["required"]) {
+          <div class="error" style="margin: -5px 0 10px">
+            * Password is required
+          </div>
+        }
+        <label
+          style="
+            align-items: center;
+            color: gray;
+            cursor: pointer;
+            display: flex;
+            font-size: 14px;
+            gap: 5px;
+            margin-left: auto;
+          "
+        >
+          Show Password
+          <input
+            id="password-cb"
+            type="checkbox"
+            (click)="toggleShowPassword()"
+          />
+        </label>
+      </div>
+    </div>
+    <button
+      id="submit-btn"
+      type="button"
+      [disabled]="userForm.invalid"
+      class="submit-btn"
+      style="margin-bottom: 10px"
+      (click)="logIn()"
+    >
+      Log In
+    </button>
+    <button type="button" class="alt-btn" (click)="signUp()">
+      New user? Sign Up
+    </button>
+  </div>
+</form>

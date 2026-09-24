@@ -1,0 +1,119 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use "@angular/material" as mat;
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #0099ff;
+}
+
+:root {
+  @include mat.progress-spinner-overrides(
+    (
+      active-indicator-color: red,
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      container-shape: 10px,
+      container-color: #ffffff,
+      container-elevation-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.3),
+    )
+  );
+}
+
+.alt-btn {
+  border: none;
+  background: none;
+  color: #0099ff;
+  cursor: pointer;
+  margin: 0 auto;
+
+  &:hover {
+    color: whitesmoke;
+  }
+
+  &:active {
+    color: #0099ff;
+  }
+}
+
+div.center-box {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div.error {
+  color: red;
+  font-size: 14px;
+  height: 17px;
+}
+
+input.error {
+  background-color: #ffcccc;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success {
+  --mat-snack-bar-button-color: #404040;
+  --mdc-snackbar-container-color: #70db70;
+  --mdc-snackbar-supporting-text-color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mat-mdc-snack-bar-container.snackbar-error {
+  --mat-snack-bar-button-color: #404040;
+  --mdc-snackbar-container-color: #ff6666;
+  --mdc-snackbar-supporting-text-color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn {
+  background-color: white;
+  border: 2px solid rgba(191, 191, 191, 0.5);
+  border-radius: 10px;
+  color: #595959;
+  cursor: pointer;
+  font-weight: bold;
+  height: 30px;
+
+  &:hover {
+    background-color: whitesmoke;
+  }
+
+  &:active {
+    background-color: white;
+  }
+
+  &:disabled {
+    background-color: white;
+    color: lightgray;
+    cursor: default;
+  }
+}
+
+.shared-label {
+  color: #595959;
+  height: 30px;
+  line-height: 30px;
+}
+
+.shared-text {
+  border-radius: 5px;
+  border: 2px solid rgba(191, 191, 191, 0.5);
+  height: 30px;
+  padding: 0 10px;
+}

@@ -1,0 +1,14 @@
+<div style="padding: 10px; border-radius: 10px">
+  <div style="display: flex; padding-top: 15px; margin-bottom: 25px">
+    <h2 style="margin: 0 auto">{{ data.title }}</h2>
+  </div>
+  <div style="display: flex; margin-bottom: 25px">
+    <p style="margin: 0 auto">Are you sure?</p>
+  </div>
+  <div style="display: flex">
+    <button style="color: red; margin-right: 10px" (click)="closeDialog(true)">
+      Confirm
+    </button>
+    <button (click)="closeDialog()"><strong>Cancel</strong></button>
+  </div>
+</div>

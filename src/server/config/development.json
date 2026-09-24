@@ -1,0 +1,6 @@
+{
+  "maxFailedLogins": 5,
+  "failedLoginTimeoutSeconds": 900,
+  "saltRounds": 10,
+  "host": "http://localhost:4200"
+}

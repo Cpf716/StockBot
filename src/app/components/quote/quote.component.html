@@ -1,0 +1,72 @@
+<div
+  style="
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 25px 25px 0;
+    width: 40%;
+  "
+  [style.height]="'calc(100vh - ' + (82 + 10 + 25 + 10) + 'px)'"
+>
+  <div
+    #messageContainer
+    style="
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 25px;
+    "
+  >
+    <div
+      style="text-align: center; color: #595959"
+      [style.margin-bottom]="messages.length ? '25px' : '0'"
+    >
+      {{ date }}
+    </div>
+    @if (messages.length === 0) {
+      <div style="margin: auto; font-size: 20px">
+        Please enter a U.S. stock symbol to begin.
+      </div>
+    }
+    @for (message of messages; track $index) {
+      <div
+        [id]="'message-' + $index"
+        style="border-radius: 10px; padding: 10px"
+        [style]="
+          message.type === RequestMessage
+            ? 'color: black; background-color: lightgray; margin: 0 auto 10px 0; '
+            : 'color: white; background-color: #0099ff; margin: 0 0 10px auto; '
+        "
+      >
+        {{ message.message }}
+      </div>
+    }
+    @if (messages.length) {
+      <div style="display: flex; padding-top: 15px">
+        <button class="alt-btn" style="margin: 0 auto" (click)="messages = []">
+          Clear history
+        </button>
+      </div>
+    }
+  </div>
+  <form [formGroup]="symbolForm">
+    <mat-form-field style="width: 100%">
+      <input
+        matInput
+        formControlName="symbol"
+        id="symbol-field"
+        type="text"
+        maxlength="5"
+        placeholder="Symbol (e.g. AMZN)"
+        style="margin-top: auto"
+        (keyup.enter)="getQuote()"
+      />
+      <mat-icon id="submit-btn" (click)="getQuote()" matSuffix>search</mat-icon>
+    </mat-form-field>
+  </form>
+</div>

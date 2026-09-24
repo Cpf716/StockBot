@@ -1,0 +1,109 @@
+<form [formGroup]="userForm">
+  <div class="center-box" style="width: 30%">
+    <div style="display: flex; margin-bottom: 25px">
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          margin-right: 25px;
+          padding-top: 2px;
+        "
+      >
+        <label
+          for="user"
+          class="shared-label"
+          [style.margin-bottom]="
+            2 +
+            (user?.touched && user?.errors?.['required'] ? 5 + 17 : 0) +
+            10 +
+            2 +
+            'px'
+          "
+        >
+          <strong>User</strong>
+        </label>
+        <label
+          for="password"
+          class="shared-label"
+          [style.margin-bottom]="
+            2 +
+            (password?.touched && password?.errors?.['required'] ? 5 + 17 : 0) +
+            10 +
+            2 +
+            'px'
+          "
+        >
+          <strong>Password</strong>
+        </label>
+        <label for="reenter-password" class="shared-label">
+          <strong>Reenter Password</strong>
+        </label>
+      </div>
+      <div style="display: flex; flex-direction: column; flex-grow: 1">
+        <input
+          id="user"
+          formControlName="user"
+          type="text"
+          class="shared-text"
+          [ngClass]="{ error: user?.touched && user?.errors?.['required'] }"
+          style="margin-bottom: 10px"
+        />
+        @if (user?.touched && user?.errors?.["required"]) {
+          <div class="error" style="margin: -5px 0 10px">
+            * User is required
+          </div>
+        }
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          class="shared-text"
+          [ngClass]="{
+            error: password?.touched && password?.errors?.['required'],
+          }"
+          style="margin-bottom: 10px"
+        />
+        @if (password?.touched && password?.errors?.["required"]) {
+          <div class="error" style="margin: -5px 0 10px">
+            * Password is required
+          </div>
+        }
+        <input
+          id="reenter-password"
+          formControlName="reenterPassword"
+          type="password"
+          class="shared-text"
+          [ngClass]="{
+            error:
+              reenterPassword?.touched &&
+              (reenterPassword?.errors?.['required'] ||
+                reenterPassword?.hasError('passwordMismatch')),
+          }"
+          (keyup.enter)="signUp()"
+        />
+        @if (
+          reenterPassword?.touched &&
+          (reenterPassword?.errors?.["required"] ||
+            reenterPassword?.hasError("passwordMismatch"))
+        ) {
+          <div class="error" style="margin-top: 5px">
+            * Passwords do not match
+          </div>
+        }
+      </div>
+    </div>
+    <button
+      id="submit-btn"
+      [disabled]="userForm.invalid"
+      type="button"
+      class="submit-btn"
+      style="margin-bottom: 10px"
+      (click)="signUp()"
+    >
+      Sign Up
+    </button>
+    <button type="button" class="alt-btn" (click)="logIn()">
+      Existing user? Log In
+    </button>
+  </div>
+</form>
