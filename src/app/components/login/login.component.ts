@@ -58,12 +58,7 @@ export class LoginComponent implements OnInit {
    * @returns
    */
   logIn() {
-    if (this.userForm.invalid) {
-      this.messageService.postMessage('Please enter user and password.', {
-        panelClass: 'snackbar-error',
-      });
-      return;
-    }
+    if (this.userForm.invalid) return;
 
     this.authService
       .logIn(this.userForm.value)

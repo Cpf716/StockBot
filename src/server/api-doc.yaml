@@ -76,3 +76,17 @@ paths:
       responses:
         "200":
           description: Successful request
+
+  "/api/users/validate":
+    get:
+      summary: Validates user input
+      operationId: validateUser
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful request

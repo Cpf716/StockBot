@@ -2,7 +2,6 @@
 
 const bcrypt = require("bcrypt");
 const config = require("../config");
-const { isValidUser } = require("../validators/validators");
 const jwt = require("jsonwebtoken");
 
 class AuthService {
@@ -10,12 +9,14 @@ class AuthService {
 
   tokenRepository;
   userRepository;
+  validationService;
 
   // Constructors
 
-  constructor(userRepository, tokenRepository) {
+  constructor(userRepository, tokenRepository, validationService) {
     this.userRepository = userRepository;
     this.tokenRepository = tokenRepository;
+    this.validationService = validationService;
   }
 
   // Member Functions
@@ -107,7 +108,8 @@ class AuthService {
    */
   async register(userData) {
     // User pattern is invalid; respond with 400 Bad Request
-    if (!isValidUser(userData.user)) throw { status: 400 };
+    if (!this.validationService.validateUser(userData.user))
+      throw { status: 400 };
 
     // Respond with 409 Conflict, if existing user
     const user = await this.userRepository.findUserById(userData.user);

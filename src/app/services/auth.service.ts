@@ -33,27 +33,6 @@ export class AuthService {
   // Member Functions
 
   /**
-   * Fetches an access token
-   * @param userData
-   * @returns
-   */
-  logIn = (userData: UserData) =>
-    new Promise((resolve, reject) =>
-      this.httpClient
-        .post<AccessToken>(environment.apiUrl + '/auth/login', userData, {
-          withCredentials: true,
-        })
-        .subscribe({
-          next: (result: AccessToken) => {
-            this.setToken(result);
-
-            resolve(undefined);
-          },
-          error: reject,
-        }),
-    );
-
-  /**
    * Returns the access token
    * @returns The access token object or null
    */
@@ -77,21 +56,6 @@ export class AuthService {
   }
 
   /**
-   * Blacklists the refresh token, nullifies the access token, and navigates to the login page
-   * @returns
-   */
-  logOut = () =>
-    this.httpClient.delete(environment.apiUrl + '/auth/logout').subscribe({
-      next: () => {
-        this.setToken(null);
-        this.messageService.postMessage('Goodbye!', {
-          panelClass: 'snackbar-success',
-        });
-      },
-      error: () => {},
-    });
-
-  /**
    * Refreshes the access token, if required, and returns it
    * @returns The access token object
    */
@@ -112,6 +76,42 @@ export class AuthService {
 
     return this.getToken();
   }
+
+  /**
+   * Fetches an access token
+   * @param userData
+   * @returns
+   */
+  logIn = (userData: UserData) =>
+    new Promise((resolve, reject) =>
+      this.httpClient
+        .post<AccessToken>(environment.apiUrl + '/auth/login', userData, {
+          withCredentials: true,
+        })
+        .subscribe({
+          next: (result: AccessToken) => {
+            this.setToken(result);
+
+            resolve(undefined);
+          },
+          error: reject,
+        }),
+    );
+
+  /**
+   * Blacklists the refresh token, nullifies the access token, and navigates to the login page
+   * @returns
+   */
+  logOut = () =>
+    this.httpClient.delete(environment.apiUrl + '/auth/logout').subscribe({
+      next: () => {
+        this.setToken(null);
+        this.messageService.postMessage('Goodbye!', {
+          panelClass: 'snackbar-success',
+        });
+      },
+      error: () => {},
+    });
 
   /**
    * Refreshes the access token

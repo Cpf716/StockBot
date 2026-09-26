@@ -10,17 +10,21 @@ import {
 import { MessageService } from '../../services/message.service';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
+import { UserValidator } from '../../validators/user.directive';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
   imports: [ReactiveFormsModule, NgClass],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
+  providers: [UserValidator],
 })
 export class SignupComponent implements OnInit {
   // Member Fields
 
   userForm: FormGroup;
+  userValidator = inject(UserValidator);
 
   // Constructors
 
@@ -30,12 +34,19 @@ export class SignupComponent implements OnInit {
     private messageService: MessageService,
   ) {
     this.userForm = new FormGroup({
-      user: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-      reenterPassword: new FormControl('', [
-        Validators.required,
-        this.matchingPasswordsValidator(),
-      ]),
+      user: new FormControl('', {
+        validators: [Validators.required],
+        asyncValidators: [this.userValidator.validate.bind(this.userValidator)],
+        updateOn: 'blur',
+      }),
+      password: new FormControl('', {
+        validators: Validators.required,
+        updateOn: 'change',
+      }),
+      reenterPassword: new FormControl('', {
+        validators: [Validators.required, this.matchingPasswordsValidator()],
+        updateOn: 'change',
+      }),
     });
   }
 
@@ -65,6 +76,8 @@ export class SignupComponent implements OnInit {
    * Registers the user and navigates to the login page
    */
   async signUp() {
+    if (this.userForm.invalid) return;
+
     try {
       await this.authService.register({
         user: this.user!.value,
