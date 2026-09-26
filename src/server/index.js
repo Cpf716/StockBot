@@ -4,6 +4,7 @@ const { OpenAPIBackend } = require("openapi-backend");
 const { StocksService } = require("./services/stocks.service");
 const { TokenRepository } = require("./repositories/token-repository");
 const { UserRepository } = require("./repositories/user-repository");
+const { ValidationService } = require("./services/validation.service");
 const config = require("./config");
 const cors = require("cors");
 const express = require("express");
@@ -14,7 +15,12 @@ const cookieParser = require("cookie-parser");
 const mysqlService = new MysqlService();
 const userRepository = new UserRepository(mysqlService);
 const tokenRepository = new TokenRepository(mysqlService);
-const authService = new AuthService(userRepository, tokenRepository);
+const validationService = new ValidationService();
+const authService = new AuthService(
+  userRepository,
+  tokenRepository,
+  validationService,
+);
 const stocksService = new StocksService();
 
 // Middleware
@@ -106,6 +112,12 @@ api.register({
         maxAge: undefined,
       });
       res.sendStatus(204);
+    }),
+  validateUser: (c, req, res) =>
+    handleRequest(req, res, () => {
+      const result = validationService.validateUser(req.query.id);
+
+      res.send(result);
     }),
   getQuote: (c, req, res) =>
     handleRequest(req, res, async () => {

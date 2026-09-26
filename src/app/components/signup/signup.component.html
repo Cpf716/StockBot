@@ -1,6 +1,10 @@
 <form [formGroup]="userForm">
   <div class="center-box" style="width: 30%">
     <div style="display: flex; margin-bottom: 25px">
+      @let invalidUser =
+        (user?.touched && user?.errors?.["required"]) ||
+        user?.hasError("invalidUser");
+
       <div
         style="
           display: flex;
@@ -12,13 +16,7 @@
         <label
           for="user"
           class="shared-label"
-          [style.margin-bottom]="
-            2 +
-            (user?.touched && user?.errors?.['required'] ? 5 + 17 : 0) +
-            10 +
-            2 +
-            'px'
-          "
+          [style.margin-bottom]="2 + (invalidUser ? 5 + 17 : 0) + 10 + 2 + 'px'"
         >
           <strong>User</strong>
         </label>
@@ -45,12 +43,19 @@
           formControlName="user"
           type="text"
           class="shared-text"
-          [ngClass]="{ error: user?.touched && user?.errors?.['required'] }"
+          [ngClass]="{
+            error: invalidUser,
+          }"
           style="margin-bottom: 10px"
         />
-        @if (user?.touched && user?.errors?.["required"]) {
+        @if (invalidUser) {
           <div class="error" style="margin: -5px 0 10px">
-            * User is required
+            *
+            {{
+              user?.touched && user?.errors?.["required"]
+                ? "User is required"
+                : "Invalid user"
+            }}
           </div>
         }
         <input
@@ -82,7 +87,7 @@
           (keyup.enter)="signUp()"
         />
         @if (
-          reenterPassword?.touched &&
+          (password?.touched || reenterPassword?.touched) &&
           (reenterPassword?.errors?.["required"] ||
             reenterPassword?.hasError("passwordMismatch"))
         ) {
