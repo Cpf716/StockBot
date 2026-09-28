@@ -2,7 +2,26 @@
 
 const bcrypt = require("bcrypt");
 const config = require("../config");
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const os = require("os");
+const path = require("path");
+
+const keyPath = path.join(os.homedir(), ".ssh");
+
+const accessPrivateKey = fs.readFileSync(
+  path.join(keyPath, "access-private_key.pem"),
+);
+const accessPublicKey = fs.readFileSync(
+  path.join(keyPath, "access-public_key.pem"),
+);
+
+const refreshPrivateKey = fs.readFileSync(
+  path.join(keyPath, "refresh-private_key.pem"),
+);
+const refreshPublicKey = fs.readFileSync(
+  path.join(keyPath, "refresh-public_key.pem"),
+);
 
 class AuthService {
   // Member Fields
@@ -77,7 +96,8 @@ class AuthService {
           ...payload,
           exp,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        accessPrivateKey,
+        { algorithm: "RS256" },
       );
 
       const refreshToken = jwt.sign(
@@ -85,7 +105,8 @@ class AuthService {
           ...payload,
           exp: iat + 60 * 60,
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        refreshPrivateKey,
+        { algorithm: "RS256" },
       );
 
       return {
@@ -136,10 +157,9 @@ class AuthService {
   async refresh(refreshToken) {
     try {
       // Verify refresh token
-      const decoded = jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-      );
+      const decoded = jwt.verify(refreshToken, refreshPublicKey, {
+        algorithms: ["RS256"],
+      });
 
       // Check if token is blacklisted
       const token = await this.tokenRepository.findTokenById(decoded.jti);
@@ -165,7 +185,8 @@ class AuthService {
           ...payload,
           exp,
         },
-        process.env.ACCESS_TOKEN_SECRET,
+        accessPrivateKey,
+        { algorithm: "RS256" },
       );
 
       const refreshTokenObj = jwt.sign(
@@ -173,7 +194,8 @@ class AuthService {
           ...payload,
           exp: iat + 60 * 60,
         },
-        process.env.REFRESH_TOKEN_SECRET,
+        refreshPrivateKey,
+        { algorithm: "RS256" },
       );
 
       return {
@@ -202,7 +224,9 @@ class AuthService {
     try {
       accessToken = this.removeBearerPrefix(accessToken);
 
-      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+      jwt.verify(accessToken, accessPublicKey, {
+        algorithms: ["RS256"],
+      });
     } catch (err) {
       throw { status: 401 };
     }
@@ -217,9 +241,9 @@ class AuthService {
     try {
       accessToken = this.removeBearerPrefix(accessToken);
 
-      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-
-      return this.tokenRepository.createToken(decoded.jti);
+      jwt.verify(accessToken, accessPublicKey, {
+        algorithms: ["RS256"],
+      });
     } catch (err) {
       throw { status: 401 };
     }
