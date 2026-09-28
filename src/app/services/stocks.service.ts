@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class StocksService {
   // Constructors
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   // Member Fields
 
@@ -19,5 +19,5 @@ export class StocksService {
    * @returns The request subscription
    */
   getQuote = (symbol: string) =>
-    this.httpClient.get<Quote>(`${environment.apiUrl}/stocks?symbol=${symbol}`);
+    this.http.get<Quote>(`${environment.apiUrl}/stocks?symbol=${symbol}`);
 }

@@ -73,24 +73,23 @@
             * Password is required
           </div>
         }
+
+        @let emptyPasswordOrMismatch =
+          (password?.touched || reenterPassword?.touched) &&
+          (reenterPassword?.errors?.["required"] ||
+            reenterPassword?.hasError("passwordMismatch"));
+
         <input
           id="reenter-password"
           formControlName="reenterPassword"
           type="password"
           class="shared-text"
           [ngClass]="{
-            error:
-              reenterPassword?.touched &&
-              (reenterPassword?.errors?.['required'] ||
-                reenterPassword?.hasError('passwordMismatch')),
+            error: emptyPasswordOrMismatch,
           }"
           (keyup.enter)="signUp()"
         />
-        @if (
-          (password?.touched || reenterPassword?.touched) &&
-          (reenterPassword?.errors?.["required"] ||
-            reenterPassword?.hasError("passwordMismatch"))
-        ) {
+        @if (emptyPasswordOrMismatch) {
           <div class="error" style="margin-top: 5px">
             * Passwords do not match
           </div>
