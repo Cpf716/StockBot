@@ -20,7 +20,7 @@ export class AuthService {
   // Constructors
 
   constructor(
-    private httpClient: HttpClient,
+    private http: HttpClient,
     private messageService: MessageService,
     private router: Router,
   ) {
@@ -84,7 +84,7 @@ export class AuthService {
    */
   logIn = (userData: UserData) =>
     new Promise((resolve, reject) =>
-      this.httpClient
+      this.http
         .post<AccessToken>(environment.apiUrl + '/auth/login', userData, {
           withCredentials: true,
         })
@@ -103,7 +103,7 @@ export class AuthService {
    * @returns
    */
   logOut = () =>
-    this.httpClient.delete(environment.apiUrl + '/auth/logout').subscribe({
+    this.http.delete(environment.apiUrl + '/auth/logout').subscribe({
       next: () => {
         this.setToken(null);
         this.messageService.postMessage('Goodbye!', {
@@ -119,7 +119,7 @@ export class AuthService {
    */
   refresh = () =>
     new Promise((resolve, reject) =>
-      this.httpClient
+      this.http
         .post<AccessToken>(environment.apiUrl + '/auth/refresh', null, {
           withCredentials: true,
         })
@@ -146,7 +146,7 @@ export class AuthService {
     const params = new URLSearchParams(userData);
 
     return new Promise((resolve, reject) =>
-      this.httpClient
+      this.http
         .post(environment.apiUrl + '/auth/register', params, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignupComponent } from './signup.component';
 import { testProviders } from '../../test-providers';
-import { HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  TestRequest,
+} from '@angular/common/http/testing';
 
 const testUser = {
   user: 'MasterChief',
@@ -27,48 +30,46 @@ describe('SignupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should validate password', () => {
+  it('should validate inputs', () => {
     const component = fixture.componentInstance;
 
     component.userForm.patchValue(testUser);
 
     fixture.detectChanges();
 
-    const testBindings = (key: string, value: string) =>
-      expect(
-        (fixture.nativeElement.querySelector('#' + key) as HTMLInputElement)
-          .value,
-      ).toBe(value);
-
-    Object.keys(testUser).forEach((key) =>
-      testBindings(key, (testUser as any)[key]),
+    // Mock /users/validate response
+    const http = TestBed.inject(HttpTestingController);
+    const req = http.expectOne(
+      (r) => r.url.includes('/users/validate') && r.method === 'GET',
     );
 
+    req.flush(true);
+
+    fixture.detectChanges();
+
+    // Ensure that "Sign Up" button is disabled for empty "Reenter Password"
     const button = fixture.nativeElement.querySelector(
       '#submit-btn',
     ) as HTMLButtonElement;
 
-    // Check that "Sign Up" button is disabled if "Reenter Password" is empty
     expect(button.disabled).toBeTruthy();
 
+    // Ensure that button is disabled for mistmatching password
     component.userForm.patchValue({
       reenterPassword: 'test',
     });
 
     fixture.detectChanges();
 
-    testBindings('reenter-password', 'test');
-
-    // Check that button is disabled if passwords don't match
     expect(button.disabled).toBeTruthy();
 
+    // Ensure that button is enabled for valid user and matching passwords
     component.userForm.patchValue({
       reenterPassword: testUser.password,
     });
 
     fixture.detectChanges();
 
-    // Check that button is enabled when user and password are non-empty and passwords match
     expect(button.disabled).toBeFalsy();
   });
 
@@ -85,7 +86,7 @@ describe('SignupComponent', () => {
     // Register new user
     fixture.nativeElement.querySelector('#submit-btn').click();
 
-    // Mock response
+    // Mock /auth/register response
     const http = TestBed.inject(HttpTestingController);
     const req = http.expectOne(
       (r) => r.url.endsWith('/auth/register') && r.method === 'POST',

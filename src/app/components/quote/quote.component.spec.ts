@@ -38,7 +38,7 @@ describe('QuoteComponent', () => {
 
     submit.click();
 
-    // Mock response
+    // Mock /stocks response
     const http = TestBed.inject(HttpTestingController);
     const req = http.expectOne(
       (r) => r.url.includes('/stocks') && r.method === 'GET',
@@ -55,10 +55,9 @@ describe('QuoteComponent', () => {
       t: 1790280000,
     });
 
-    // Refresh the DOM
     fixture.detectChanges();
 
-    // Check that the request/response messages are displayed
+    // Ensure that request/response messages are displayed
     const messages = fixture.nativeElement.querySelectorAll('[id^="message-"]');
 
     expect(messages.length).toBe(2);

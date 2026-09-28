@@ -3,13 +3,14 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 10px 5px -5px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     margin: auto;
     padding: 25px 25px 0;
     width: 40%;
   "
-  [style.height]="'calc(100vh - ' + (82 + 10 + 25 + 10) + 'px)'"
+  [style.height]="'calc(100dvh - ' + (82 + 25) + 'px)'"
 >
   <div
     #messageContainer

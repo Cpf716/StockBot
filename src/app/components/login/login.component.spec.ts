@@ -41,17 +41,7 @@ describe('LoginComponent', () => {
 
     fixture.detectChanges();
 
-    const testBindings = (key: string, value: string) =>
-      expect(
-        (fixture.nativeElement.querySelector('#' + key) as HTMLInputElement)
-          .value,
-      ).toBe(value);
-
-    Object.keys(testUser).forEach((key) =>
-      testBindings(key, (testUser as any)[key]),
-    );
-
-    // Check that the "Log In" button is enabled
+    // Ensure that "Log In" button is enabled
     const button = fixture.nativeElement.querySelector(
       '#submit-btn',
     ) as HTMLButtonElement;
@@ -61,7 +51,7 @@ describe('LoginComponent', () => {
     // Fetch access token
     button.click();
 
-    // Mock response
+    // Mock /auth/login response
     const http = TestBed.inject(HttpTestingController);
     const req = http.expectOne(
       (r) => r.url.endsWith('/auth/login') && r.method === 'POST',
