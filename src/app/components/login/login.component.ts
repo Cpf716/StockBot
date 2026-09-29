@@ -1,12 +1,11 @@
 import { AuthService } from '../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MessageService } from '../../services/message.service';
 import { NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -22,11 +21,12 @@ export class LoginComponent implements OnInit {
   userForm: FormGroup;
   showPassword = false;
 
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
+
   // Constructors
 
   constructor(
     private authService: AuthService,
-    private messageService: MessageService,
     private router: Router,
   ) {
     this.userForm = new FormGroup({
@@ -52,6 +52,8 @@ export class LoginComponent implements OnInit {
   }
 
   // Member Functions
+
+  focusPassword = () => this.passwordInput.nativeElement.focus();
 
   /**
    * Validates the user and navigates to the "quote" page

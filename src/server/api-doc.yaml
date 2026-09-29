@@ -90,3 +90,10 @@ paths:
       responses:
         "200":
           description: Successful request
+
+  "/api/ping":
+    get:
+      operationId: ping
+      responses:
+        "200":
+          description: Succesful request

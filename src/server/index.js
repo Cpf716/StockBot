@@ -130,6 +130,7 @@ api.register({
 
       res.send(result);
     }),
+  ping: (c, req, res) => res.send("Hello, world!"),
   notFound: (c, req, res) => res.sendStatus(404),
 });
 

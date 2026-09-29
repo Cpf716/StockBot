@@ -61,7 +61,7 @@ export class QuoteComponent {
 
     this.date = [
       [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('/'),
-      [date.getHours() % 12, date.getMinutes()]
+      [date.getHours() % 12 || 12, date.getMinutes()]
         .map((v) => String(v).padStart(2, '0'))
         .join(':'),
       date.getHours() >= 12 ? 'PM' : 'AM',

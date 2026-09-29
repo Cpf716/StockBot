@@ -1,5 +1,5 @@
 <form [formGroup]="userForm">
-  <div class="center-box" style="width: 30%">
+  <div class="center-box">
     <div style="display: flex; margin-bottom: 25px">
       @let invalidUser =
         (user?.touched && user?.errors?.["required"]) ||
@@ -48,6 +48,7 @@
             error: invalidUser,
           }"
           style="margin-bottom: 10px"
+          (keyup.enter)="focusPassword()"
         />
         @if (invalidUser) {
           <div class="error" style="margin: -5px 0 10px">
@@ -60,6 +61,7 @@
           </div>
         }
         <input
+          #passwordInput
           id="password"
           formControlName="password"
           type="password"
@@ -68,6 +70,7 @@
             error: password?.touched && password?.errors?.['required'],
           }"
           style="margin-bottom: 10px"
+          (keyup.enter)="focusReenterPassword()"
         />
         @if (password?.touched && password?.errors?.["required"]) {
           <div class="error" style="margin: -5px 0 10px">
@@ -81,6 +84,7 @@
             reenterPassword?.hasError("passwordMismatch"));
 
         <input
+          #reenterPasswordInput
           id="reenter-password"
           formControlName="reenterPassword"
           type="password"
