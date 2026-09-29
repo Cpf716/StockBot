@@ -4,6 +4,7 @@ const mysql = require("mysql2");
 class MysqlService {
   // Member Fields
 
+  database = "stockbot";
   pool;
 
   // Constructors
@@ -47,7 +48,7 @@ class MysqlService {
     // Dynamically "use" database
     if (
       (err = await new Promise((resolve) =>
-        conn.changeUser({ database: database || "rts" }, resolve),
+        conn.changeUser({ database: database || this.database }, resolve),
       ))
     )
       throw err;

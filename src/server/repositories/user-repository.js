@@ -20,7 +20,7 @@ class UserRepository {
    */
   createUser = (userData) =>
     this.mysqlService.update({
-      sql: "insert into users (id, password_hash) values (?, ?)",
+      sql: "insert into users (id, password_hash) values (lower(?), ?)",
       values: Object.values(userData),
     });
 
@@ -31,7 +31,7 @@ class UserRepository {
    */
   async findUserById(id) {
     const [result] = await this.mysqlService.query({
-      sql: "select * from users where id = ?",
+      sql: "select * from users where id = lower(?)",
       values: [id],
     });
 

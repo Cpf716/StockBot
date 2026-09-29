@@ -1,6 +1,6 @@
 import { AuthService } from '../services/auth.service';
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
-import { Observable, from, switchMap } from 'rxjs';
+import { Observable, Subject, from, switchMap, takeUntil } from 'rxjs';
 import { inject } from '@angular/core';
 
 export function authInterceptor(
@@ -8,6 +8,7 @@ export function authInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   const authService = inject(AuthService);
+  const canceled = new Subject<void>();
 
   return from(
     new Promise(async (resolve) => {
@@ -20,12 +21,17 @@ export function authInterceptor(
       if (token && Math.floor(Date.now() / 1000) + 30 >= token.exp) {
         try {
           await authService.refresh();
-        } catch (err) {}
+        } catch (err) {
+          // Cancel subsequent request if token refresh fails
+          canceled.next();
+          canceled.complete();
+        }
       }
 
       resolve(authService.getToken());
     }),
   ).pipe(
+    takeUntil(canceled),
     switchMap((token: any) => {
       // Set authorization header, if applicable
       if (token) {

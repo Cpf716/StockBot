@@ -63,7 +63,10 @@ const api = new OpenAPIBackend({
 
 api.init();
 api.register({
-  // validationFail: (c, req, res) => res.status(400).send(c.validation.errors),
+  validationFail: (c, req, res) =>
+    res
+      .status(400)
+      .send(c.validation.errors[0].message || c.validation.errors[0]),
   logIn: async (c, req, res) =>
     handleRequest(req, res, async () => {
       const result = await authService.logIn(req.body);
