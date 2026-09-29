@@ -1,5 +1,5 @@
 {
-  "name": "rts",
+  "name": "stockbot",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -20,11 +20,11 @@
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
     "@types/jest": "^30.0.0",
-    "bcrypt": "^6.0.0",
+    "argon2": "^0.45.1",
     "cookie-parser": "^1.4.7",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.24.4",
-    "openapi-backend": "5.12",
+    "openapi-backend": "5.15",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
