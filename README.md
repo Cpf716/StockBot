@@ -56,10 +56,16 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
-## Generate Symmetric Keys (For JWT)
+## Generate Private Keys:
 
 ```
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+openssl genpkey -algorithm RSA -out private-access_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl genpkey -algorithm RSA -out private-refresh_key.pem -pkeyopt rsa_keygen_bits:2048
 ```
 
-Because a single server both signs and verifies the key, the HS256 algorithm using a symmetric key is preferable for its simplicity and performance: only one key (per access and refresh token) is required, and the HS256 algorithm only requires a single pass compared to RSA's modular exponentiation.
+## Extract Public Keys:
+
+```
+openssl rsa -in private-access_key.pem -pubout -out public-access_key.pem
+openssl rsa -in private-refresh_key.pem -pubout -out public-refresh_key.pem
+```
