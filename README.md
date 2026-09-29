@@ -1,6 +1,8 @@
 # StockBot
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27 and was built for Node.js v22.
+![StockBot](./assets/screenshot.png)
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27 and was built on Node.js v22.5.1 and MySQL 8.0.31.
 
 ## Start the server
 
@@ -10,7 +12,7 @@ To start the local server, run:
 node --env-file=.env src/server/index.js
 ```
 
-The development server stores secrets like the DB config, API URLs, and API keys in the .env file. For a production application, those should be stored in AWS Secrets Manager (or similar).
+The development server stores secrets like the DB config, API URLs, and API keys in a .env file. For a production application, those should be stored in AWS Secrets Manager (or similar).
 
 ## Start the client
 
@@ -63,3 +65,30 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 Because a single server both signs and verifies the key, the HS256 algorithm using a symmetric key is preferable for its simplicity and performance: only one key (per access and refresh token) is required, and the HS256 algorithm only requires a single pass compared to RSA's modular exponentiation.
+
+## Run on LAN
+
+```
+# macOS
+ipconfig getifaddr en0
+```
+
+```
+ng serve --host YOUR_LOCAL_IP --disable-host-check
+```
+
+Angular Proxy is enabled, so if you change the server port in _src/server/config/default.json_, also be sure to change it in _proxy.conf.json_.
+
+## Environment Variables
+
+```
+DB_HOST=YOUR_DB_HOST
+DB_USER=YOUR_DB_USER
+DB_PASSWORD=YOUR_DB_PASSWORD
+ACCESS_TOKEN_SECRET=YOUR_ACCESS_TOKEN_SECRET
+REFRESH_TOKEN_SECRET=YOUR_REFRESH_TOKEN_SECRET
+FINNHUB_URL=https://finnhub.io/api/v1
+FINNHUB_TOKEN=YOUR_FINNHUB_API_KEY
+```
+
+You can register for free at https://finnhub.io/ for your API key.

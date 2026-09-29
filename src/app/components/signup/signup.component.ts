@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -25,6 +25,9 @@ export class SignupComponent implements OnInit {
 
   userForm: FormGroup;
   userValidator = inject(UserValidator);
+
+  @ViewChild('passwordInput') passwordInput!: ElementRef;
+  @ViewChild('reenterPasswordInput') reenterPasswordInput!: ElementRef;
 
   // Constructors
 
@@ -72,6 +75,27 @@ export class SignupComponent implements OnInit {
 
   // Member Functions
 
+  focusPassword = () => this.passwordInput.nativeElement.focus();
+
+  focusReenterPassword = () => this.reenterPasswordInput.nativeElement.focus();
+
+  /**
+   * Navigates to the login page
+   * @returns
+   */
+  logIn = () => this.router.navigate(['login']);
+
+  /**
+   * Validates passwords and returns null, otherwise returns an error if mismatching
+   * @returns The password mismatch error object or null
+   */
+  matchingPasswordsValidator =
+    (): ValidatorFn =>
+    (control: AbstractControl): ValidationErrors | null =>
+      this.password?.value === this.reenterPassword?.value
+        ? null
+        : { passwordMismatch: true };
+
   /**
    * Registers the user and navigates to the login page
    */
@@ -90,21 +114,4 @@ export class SignupComponent implements OnInit {
       this.logIn();
     } catch (err) {}
   }
-
-  /**
-   * Navigates to the login page
-   * @returns
-   */
-  logIn = () => this.router.navigate(['login']);
-
-  /**
-   * Validates passwords and returns null, otherwise returns an error if mismatching
-   * @returns The password mismatch error object or null
-   */
-  matchingPasswordsValidator =
-    (): ValidatorFn =>
-    (control: AbstractControl): ValidationErrors | null =>
-      this.password?.value === this.reenterPassword?.value
-        ? null
-        : { passwordMismatch: true };
 }

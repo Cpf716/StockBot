@@ -10,6 +10,20 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #0099ff;
+
+  &.portrait-locked {
+    // Force portrait mode on mobile
+    @media screen and (orientation: landscape) and (pointer: coarse) {
+      height: 100vw;
+      width: 100vh;
+      left: 0;
+      top: 100%;
+      overflow-x: hidden;
+      position: absolute;
+      transform: rotate(-90deg);
+      transform-origin: left top;
+    }
+  }
 }
 
 :root {
@@ -55,6 +69,15 @@ div.center-box {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  // iPhone 12-14
+  @media only screen and (max-width: 843px) {
+    width: 70%;
+  }
+
+  @media screen and (min-width: 844px) {
+    width: 30%;
+  }
 }
 
 div.error {
