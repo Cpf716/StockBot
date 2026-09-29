@@ -1,0 +1,244 @@
+{
+  "info": {
+    "_postman_id": "b14896f8-b6f0-4db7-8209-4918c0e746cc",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48240854",
+    "_collection_link": "https://go.postman.co/collection/48240854-b14896f8-b6f0-4db7-8209-4918c0e746cc?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "StockBot",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "/api/auth/login",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "user",
+                      "value": "MasterChief",
+                      "type": "text",
+                      "uuid": "4cab9cf1-d814-4db0-8484-3d3a8059a92a"
+                    },
+                    {
+                      "key": "password",
+                      "value": "John117",
+                      "type": "text",
+                      "uuid": "ab5c03bf-192c-4096-b02e-b799044a2fda"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/api/auth/logout",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "",
+                    "description": "Access token",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:8080/api/auth/logout",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/api/auth/register",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "user",
+                      "value": "MasterChief",
+                      "type": "text",
+                      "uuid": "4cab9cf1-d814-4db0-8484-3d3a8059a92a"
+                    },
+                    {
+                      "key": "password",
+                      "value": "John117",
+                      "type": "text",
+                      "uuid": "ab5c03bf-192c-4096-b02e-b799044a2fda"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/auth/register",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "/api/auth/refresh",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"refreshToken\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/auth/refresh",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "/api/stocks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "description": "Access token",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/stocks?symbol=AMZN",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "stocks"
+              ],
+              "query": [
+                {
+                  "key": "symbol",
+                  "value": "AMZN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/api/users/validate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/users/validate?id=MasterChief",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "users",
+                "validate"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "MasterChief"
+                }
+              ]
+            },
+            "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

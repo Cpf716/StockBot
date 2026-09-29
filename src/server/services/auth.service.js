@@ -1,6 +1,6 @@
 // To Do: Handle DB errors
 
-const bcrypt = require("bcrypt");
+const argon2 = require("argon2");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 
@@ -27,6 +27,9 @@ class AuthService {
    * @returns The access token
    */
   async logIn(userData) {
+    // Normalize user case
+    userData.user = userData.user.toLowerCase();
+
     const user = await this.userRepository.findUserById(userData.user);
 
     // User not found; stop immediately
@@ -47,9 +50,9 @@ class AuthService {
     }
 
     // Compare password to hash
-    const match = await bcrypt.compare(
-      userData.password,
+    const match = await argon2.verify(
       user.password_hash.toString(),
+      userData.password,
     );
 
     if (match) {
@@ -107,6 +110,9 @@ class AuthService {
    * @param {{ user: string; password: string }} userData
    */
   async register(userData) {
+    // Normalize user case
+    userData.user = userData.user.toLowerCase();
+
     // User pattern is invalid; respond with 400 Bad Request
     if (!this.validationService.validateUser(userData.user))
       throw { status: 400 };
@@ -119,10 +125,7 @@ class AuthService {
     }
 
     // Hash password using HS256
-    const passwordHash = await bcrypt.hash(
-      userData.password,
-      config.saltRounds,
-    );
+    const passwordHash = await argon2.hash(userData.password);
 
     // Insert user and password hash into the DB
     await this.userRepository.createUser({ user: userData.user, passwordHash });
