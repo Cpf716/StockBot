@@ -11,16 +11,18 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #0099ff;
 
-  // Force portrait mode on mobile
-  @media screen and (orientation: landscape) and (pointer: coarse) {
-    height: 100vw;
-    width: 100vh;
-    left: 0;
-    top: 100%;
-    overflow-x: hidden;
-    position: absolute;
-    transform: rotate(-90deg);
-    transform-origin: left top;
+  &.portrait-locked {
+    // Force portrait mode on mobile
+    @media screen and (orientation: landscape) and (pointer: coarse) {
+      height: 100vw;
+      width: 100vh;
+      left: 0;
+      top: 100%;
+      overflow-x: hidden;
+      position: absolute;
+      transform: rotate(-90deg);
+      transform-origin: left top;
+    }
   }
 }
 

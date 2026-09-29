@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MessageService } from '../../services/message.service';
 import {
   FormControl,
@@ -29,7 +35,7 @@ type Message = { type: MessageType; message: string };
   templateUrl: './quote.component.html',
   styleUrl: './quote.component.scss',
 })
-export class QuoteComponent {
+export class QuoteComponent implements OnInit, OnDestroy {
   // Typedef
 
   RequestMessage = MessageType.Request;
@@ -57,15 +63,13 @@ export class QuoteComponent {
   }
 
   ngOnInit() {
-    const date = new Date();
+    document.body.classList.add('portrait-locked');
 
-    this.date = [
-      [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('/'),
-      [date.getHours() % 12 || 12, date.getMinutes()]
-        .map((v) => String(v).padStart(2, '0'))
-        .join(':'),
-      date.getHours() >= 12 ? 'PM' : 'AM',
-    ].join(' ');
+    this.setDate();
+  }
+
+  ngOnDestroy() {
+    document.body.classList.remove('portrait-locked');
   }
 
   // Member Functions
@@ -112,5 +116,17 @@ export class QuoteComponent {
       },
       error: () => {},
     });
+  }
+
+  setDate() {
+    const date = new Date();
+
+    this.date = [
+      [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('/'),
+      [date.getHours() % 12 || 12, date.getMinutes()]
+        .map((v) => String(v).padStart(2, '0'))
+        .join(':'),
+      date.getHours() >= 12 ? 'PM' : 'AM',
+    ].join(' ');
   }
 }

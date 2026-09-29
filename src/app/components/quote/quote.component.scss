@@ -8,9 +8,22 @@
   margin: auto;
   padding: 25px 25px 0;
 
+  @media only screen and (min-height: 391px) {
+    // 82px (header) - 25px (padding)
+    height: calc(100dvh - 107px);
+  }
+
   // iPhone 12-14
   @media only screen and (min-width: 390px) and (max-width: 844px) {
     width: 80%;
+
+    @media (orientation: landscape) {
+      height: calc(100dvw - 107px);
+    }
+
+    @media (orientation: portrait) {
+      height: calc(100dvh - 107px);
+    }
   }
 
   @media screen and (min-width: 845px) {
